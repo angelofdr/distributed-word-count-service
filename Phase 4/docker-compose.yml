@@ -1,0 +1,91 @@
+version: "3.9"
+services:
+  server1:
+    build:
+      context: ./server
+    environment:
+      - REDIS_HOST=Redis
+      - REDIS_PORT=6379
+    depends_on:
+      - redis
+    image: server1:latest
+    container_name: server1
+    ports:
+      - "4000:4000"
+
+  server2:
+    build:
+      context: ./server
+    environment:
+      - REDIS_HOST=Redis
+      - REDIS_PORT=6379
+    depends_on:
+      - redis
+    image: server2:latest
+    container_name: server2
+    ports:
+      - "4001:4000"
+
+  server3:
+    build:
+      context: ./server
+    environment:
+      - REDIS_HOST=Redis
+      - REDIS_PORT=6379
+    depends_on:
+      - redis
+    image: server3:latest
+    container_name: server3
+    ports:
+      - "4002:4000"
+
+  client1:
+    build:
+      context: ./client
+    environment:
+      - LOADBALANCER_HOST=loadbalancer
+      - LOADBALANCER_PORT=12345
+    image: client:latest
+    container_name: client
+    depends_on:
+      - loadbalancer
+
+  client2:
+    build:
+      context: ./client
+    environment:
+      - LOADBALANCER_HOST=loadbalancer
+      - LOADBALANCER_PORT=12345
+    image: client2:latest
+    container_name: client2
+    depends_on:
+      - loadbalancer
+
+  client3:
+    build:
+      context: ./client
+    environment:
+      - LOADBALANCER_HOST=loadbalancer
+      - LOADBALANCER_PORT=12345
+    image: client3:latest
+    container_name: client3
+    depends_on:
+      - loadbalancer
+
+  loadbalancer:
+    build:
+      context: ./loadbalancer
+    image: loadbalancer:latest
+    container_name: loadbalancer
+    ports:
+      - "12345:12345"
+    depends_on:
+      - server1
+      - server2
+      - server3
+
+  redis:
+    image: redis:7.2   # or use your custom ./Redis build if needed
+    container_name: redis
+    ports:
+      - "6379:6379"
