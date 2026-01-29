@@ -18,8 +18,6 @@ Components:
 
 The architecture evolves across multiple phases to progressively introduce scalability and fault tolerance.
 
-![System Architecture](diagrams/architecture.png)
-
 ## Technologies
 
 - Python
